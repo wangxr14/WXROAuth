@@ -73,3 +73,40 @@ def renderCoauthor(request):
 	    answerlist.append({'ID':item,'name':expert_name,'times':co_times,'timesnum':co_times_num})
 	s_answerlist = sorted(answerlist,key = lambda x:x['timesnum'],reverse=True)
         return render(request, 'coauthor_page.html',{'id':expert_id,'coauthorlist':s_answerlist})
+
+def expert_finding(request):
+	domain = request.GET.get('domain','')
+	#r = redis.StrictRedis(host='127.0.0.1', post=6379)
+        print domain
+        listlen = r.llen(domain)
+        expertlist = r.lrange(domain,0,listlen)
+	answerlist = []
+	for item in expertlist:
+	    print item
+	    
+	    expert_name = r.get(item+':n')
+	    expert_hi = r.get(item+':hi')
+	    if expert_hi != None:
+		expert_hi_num = int(expert_hi)
+	    else:
+		expert_hi_num = 0
+	    answerlist.append({'ID':item,'name':expert_name,'hi':expert_hi,'hinum':expert_hi_num})
+	s_answerlist = sorted(answerlist,key = lambda x:x['hinum'],reverse=True)
+	return s_answerlist
+	
+def coauthors(request):
+	expert_id = request.GET.get('id','')
+	answerlist = []
+    	listlen = r.llen(expert_id)
+    	expertlist = r.lrange(expert_id+':co',0,listlen)
+	for item in expertlist:
+	    expert_name = r.get(item+':n')
+	    co_times = r.get(expert_id+':'+item)
+	    if co_times != None:
+	    	co_times_num = int(co_times)
+	    else:
+		co_times_num = 0
+	    answerlist.append({'ID':item,'name':expert_name,'times':co_times,'timesnum':co_times_num})
+	s_answerlist = sorted(answerlist,key = lambda x:x['timesnum'],reverse=True)
+        return s_answerlist
+	

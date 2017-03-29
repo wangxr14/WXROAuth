@@ -22,4 +22,6 @@ urlpatterns = [
 	url(r'^loginWithGithub/$',view.loginWithGithub),
 	url(r'^search_page/$',view.renderSearchPage),
 	url(r'^coauthor/$',view.renderCoauthor),
+	url(r'^expert_finding/$',view.expertFinding),
+	url(r'^coauthors/$',view.Coauthors),
 ]
