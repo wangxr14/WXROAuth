@@ -5,6 +5,7 @@ import urllib
 import urllib2
 import json
 import redis
+import types
  
 client_id = '59e20ba35722b5a2a905'
 client_secret = '1d2bc69a9c54627f8e0c45cb8e2d63a5d3ca2c5d'
@@ -46,19 +47,24 @@ def renderSearchPage(request):
 	answerlist = []
 	for item in expertlist:
 	    print item
+	    
 	    expert_name = r.get(item+':n')
 	    expert_hi = r.get(item+':hi')
-	#    expert_hi_num = int(expert_hi)
-	    answerlist.append({'ID':item,'name':expert_name,'hi':expert_hi})
-	return render(request, 'searchPage.html',{'domain':domain,'answerlist':answerlist})
+	    if expert_hi != None:
+		expert_hi_num = int(expert_hi)
+	    else:
+		expert_hi_num = 0
+	    answerlist.append({'ID':item,'name':expert_name,'hi':expert_hi,'hinum':expert_hi_num})
+	s_answerlist = sorted(answerlist,key = lambda x:x['hinum'],reverse=True)
+	return render(request, 'searchPage.html',{'domain':domain,'answerlist':s_answerlist})
 
 def renderCoauthor(request):
 	expert_id = request.GET.get('id','')
 	answerlist = []
-    listlen = r.llen(expert_id)
-    expertlist = r.lrange(expert_id+':co',0,listlen)
+    	listlen = r.llen(expert_id)
+    	expertlist = r.lrange(expert_id+':co',0,listlen)
 	for item in expertlist:
 	    expert_name = r.get(item+':n')
 	    co_times = r.get(expert_id+':'+item)
-		answerlist.append({'ID':item,'name':expert_name,'times':co_times})
+	    answerlist.append({'ID':item,'name':expert_name,'times':co_times})
         return render(request, 'coauthor_page.html',{'id':expert_id,'coauthorlist':answerlist})
