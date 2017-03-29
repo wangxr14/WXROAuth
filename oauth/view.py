@@ -4,10 +4,12 @@ from django.shortcuts import render
 import urllib
 import urllib2
 import json
+import redis
  
 client_id = '59e20ba35722b5a2a905'
 client_secret = '1d2bc69a9c54627f8e0c45cb8e2d63a5d3ca2c5d'
 code = ''
+r = redis.StrictRedis(host='127.0.0.1', port=6379)
  
 def login(request):
     context          = {}
@@ -37,5 +39,9 @@ def loginWithGithub(request):
 
 def renderSearchPage(request):
 	domain = request.GET.get('domain','')
+	#r = redis.StrictRedis(host='127.0.0.1', post=6379)
+	print domain
+        listlen = r.llen(domain)
+        expertlist = r.lrange(domain,0,listlen)
 	
-	return render(request, 'searchPage.html',{'domain':domain})
+	return render(request, 'searchPage.html',{'domain':domain,'answerlist':expertlist})
