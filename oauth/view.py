@@ -40,8 +40,13 @@ def loginWithGithub(request):
 def renderSearchPage(request):
 	domain = request.GET.get('domain','')
 	#r = redis.StrictRedis(host='127.0.0.1', post=6379)
-	print domain
-        listlen = r.llen(domain)
-        expertlist = r.lrange(domain,0,listlen)
-	
-	return render(request, 'searchPage.html',{'domain':domain,'answerlist':expertlist})
+    print domain
+    listlen = r.llen(domain)
+    expertlist = r.lrange(domain,0,listlen)
+	answerlist = []
+	for item in expertlist:
+	    expert_name = r.get(item+':n')
+		expert_hi = r.get(item+':hi')
+		expert_hi_num = int(expert_hi)
+		answerslist.append({'ID':item,'name':expert_name,'hi':expert_hi})
+	return render(request, 'searchPage.html',{'domain':domain,'answerlist':answerlist})
