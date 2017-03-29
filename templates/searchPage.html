@@ -14,7 +14,10 @@
     {% for item in answerlist %}
     <tr>
       <td>{{ item.ID }}</td>
-      <td>{{ item.name }}</td>
+	  <form method="GET" action="/coauthor">
+	    <input type="hidden" name="expert_name" value="{{ item.name }}"/>
+	      <td><a>{{ item.name }}</a></td>
+	  </form>   
       <td>{{ item.hi }}</td>
   </tr>
 {% endfor %}

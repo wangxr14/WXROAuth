@@ -51,3 +51,8 @@ def renderSearchPage(request):
 	#    expert_hi_num = int(expert_hi)
 	    answerlist.append({'ID':item,'name':expert_name,'hi':expert_hi})
 	return render(request, 'searchPage.html',{'domain':domain,'answerlist':answerlist})
+
+def renderSearchPage(request):
+	expert_name = request.GET.get('expert_name','')
+	answerlist = []
+    return render(request, 'coauthor_page.html',{'name':expert_name,'answerlist':answerlist})
