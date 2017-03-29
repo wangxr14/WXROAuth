@@ -66,5 +66,10 @@ def renderCoauthor(request):
 	for item in expertlist:
 	    expert_name = r.get(item+':n')
 	    co_times = r.get(expert_id+':'+item)
-	    answerlist.append({'ID':item,'name':expert_name,'times':co_times})
-        return render(request, 'coauthor_page.html',{'id':expert_id,'coauthorlist':answerlist})
+	    if co_times != None:
+	    	co_times_num = int(co_times)
+	    else:
+		co_times_num = 0
+	    answerlist.append({'ID':item,'name':expert_name,'times':co_times,'timesnum':co_times_num})
+	s_answerlist = sorted(answerlist,key = lambda x:x['timesnum'],reverse=True)
+        return render(request, 'coauthor_page.html',{'id':expert_id,'coauthorlist':s_answerlist})
