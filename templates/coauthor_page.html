@@ -8,14 +8,14 @@
 
 <h4>Coauthor Page<h4>
 
-<p class="pos_2"><br>Expert Name : {{ name }}</br></p>
+<p class="pos_2"><br>Expert ID : {{ id }}</br></p>
 <table border="1" class="pos_abs">
  <tr><th>ID</th><th>Name</th><th>times</th></tr>
     {% for item in coauthorlist %}
     <tr>
       <td>{{ item.ID }}</td>
 	  <td>{{ item.name }}</td>  
-      <td>{{ item.hi }}</td>
+      <td>{{ item.times }}</td>
     </tr>
     {% endfor %}
 </table>

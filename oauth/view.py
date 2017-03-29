@@ -53,6 +53,12 @@ def renderSearchPage(request):
 	return render(request, 'searchPage.html',{'domain':domain,'answerlist':answerlist})
 
 def renderCoauthor(request):
-	expert_name = request.GET.get('expert_name','')
+	expert_id = request.GET.get('id','')
 	answerlist = []
-        return render(request, 'coauthor_page.html',{'name':expert_name,'answerlist':answerlist})
+    listlen = r.llen(expert_id)
+    expertlist = r.lrange(expert_id+':co',0,listlen)
+	for item in expertlist:
+	    expert_name = r.get(item+':n')
+	    co_times = r.get(expert_id+':'+item)
+		answerlist.append({'ID':item,'name':expert_name,'times':co_times})
+        return render(request, 'coauthor_page.html',{'id':expert_id,'coauthorlist':answerlist})
